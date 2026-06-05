@@ -49,10 +49,10 @@ O programa também funciona sem IA. Nesse caso, ele exibe o relatório calculado
 ## Demonstração
 
 Prints da execução
-```markdown
-Captura de tela 2026-06-04 214219.png
-Captura de tela 2026-06-04 214326.png
-```
+
+<img src="https://github.com/MateusCurtale/control_missionIA/blob/main/Captura%20de%20tela%202026-06-04%20214219.png" alt="Print de execução 01">
+<img src="https://github.com/MateusCurtale/control_missionIA/blob/main/Captura%20de%20tela%202026-06-04%20214326.png" alt="Print de execução 02">
+
 
 ## Vídeo
 
