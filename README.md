@@ -50,9 +50,8 @@ O programa também funciona sem IA. Nesse caso, ele exibe o relatório calculado
 
 Prints da execução
 ```markdown
-<img width="1880" height="867" alt="Captura de tela 2026-06-04 214219" src="https://github.com/user-attachments/assets/d8ab4d3c-d6b8-4828-ac7b-f198d19c329e" />
-<img width="1915" height="872" alt="Captura de tela 2026-06-04 214326" src="https://github.com/user-attachments/assets/c3e1fc53-cc46-463b-ac78-6b303bb55791" />
-
+Captura de tela 2026-06-04 214219.png
+Captura de tela 2026-06-04 214326.png
 ```
 
 ## Vídeo
