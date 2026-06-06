@@ -44,6 +44,11 @@ python -m pip install ollama
 ollama pull llama3.2:1b
 ```
 
+Link do código no colab
+
+```powershell
+https://colab.research.google.com/drive/1HpElrFFEg97cOmT68rAu_-RQGcS9mcnJ?usp=sharing
+```
 O programa também funciona sem IA. Nesse caso, ele exibe o relatório calculado pelas regras do Python e informa que a análise complementar não foi gerada.
 
 ## Demonstração
