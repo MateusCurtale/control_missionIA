@@ -56,4 +56,4 @@ Prints da execução
 
 ## Vídeo
 
-[Assistir ao vídeo de demonstração](https://link-do-video.com)
+https://www.linkedin.com/posts/mateus-curtale-serafim_fiap-ia-globalsoution-ugcPost-7468869698475094016-InsQ/?utm_source=share&utm_medium=member_desktop&rcm=ACoAADv3OS8BEf8mAuZIKWob44tDC1KpXSghiKg
