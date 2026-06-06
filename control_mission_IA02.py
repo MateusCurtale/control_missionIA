@@ -1,4 +1,8 @@
-import ollama
+try:
+    import ollama
+except ImportError:
+    ollama = None
+
 
 # dados = [temperatura, comunicacao, bateria, oxigenio, estabilidade]
 dados_missao = [
@@ -10,32 +14,33 @@ dados_missao = [
     [34, 55, 32, 82, 50],
 ]
 
-pontuacao_total = [0] * len(dados_missao)  # Inicializa a pontuação total para cada leitura
 AREAS = ["Temperatura", "Comunicação", "Bateria", "Oxigênio", "Estabilidade"]
+pontuacao_total = [0] * len(dados_missao)
+
+
+def reiniciar_pontuacao(dados):
+    return [0] * len(dados)
+
 
 # Analisa a temperatura.
 def analisar_temperatura(dados):
-
     print("\n=== ANÁLISE DE TEMPERATURA ===")
-    
-    # Percorre cada leitura de dados e avalia a temperatura, atribuindo pontuações conforme os critérios estabelecidos.
+
     for i, leitura in enumerate(dados):
         temperatura = leitura[0]
-        if temperatura < 18:  # Atenção caso a temperatura esteja abaixo de 18°C
-            print(f"CICLO {i+1}: ATENÇÃO: Temperatura BAIXA   ({temperatura} °C)")
-            pontuacao_total[i] += 1
 
-        elif temperatura > 30 and temperatura <= 35: # Atenção caso a temperatura esteja entre 30°C e 35°C
-            print(f"CICLO {i+1}: ATENÇÃO: Temperatura ALTA ({temperatura} °C)")
+        if temperatura < 18:
+            print(f"CICLO {i + 1}: ATENÇÃO: Temperatura BAIXA ({temperatura} °C)")
             pontuacao_total[i] += 1
-
-        elif temperatura > 35:  # Alerta crítico caso a temperatura esteja acima de 35°C
-            print(f"CICLO {i+1}: ALERTA: Superaquecimento CRÍTICO ({temperatura} °C)")
+        elif temperatura <= 30:
+            print(f"CICLO {i + 1}: Temperatura NORMAL ({temperatura} °C)")
+        elif temperatura <= 35:
+            print(f"CICLO {i + 1}: ATENÇÃO: Temperatura ALTA ({temperatura} °C)")
+            pontuacao_total[i] += 1
+        else:
+            print(f"CICLO {i + 1}: ALERTA: Superaquecimento CRÍTICO ({temperatura} °C)")
             pontuacao_total[i] += 2
 
-        else: # Temperatura normal
-            print(f"CICLO {i+1}: Temperatura NORMAL ({temperatura} °C)")
-            pontuacao_total[i] += 0
 
 # Analisa a comunicação.
 def analisar_comunicacao(dados):
@@ -53,6 +58,7 @@ def analisar_comunicacao(dados):
         else:
             print(f"CICLO {i + 1}: Comunicação NORMAL ({comunicacao}%)")
 
+
 # Analisa a bateria.
 def analisar_bateria(dados):
     print("\n=== ANÁLISE DE BATERIA ===")
@@ -68,6 +74,7 @@ def analisar_bateria(dados):
             pontuacao_total[i] += 1
         else:
             print(f"CICLO {i + 1}: Bateria NORMAL ({bateria}%)")
+
 
 # Analisa o nível de oxigênio.
 def analisar_oxigenio(dados):
@@ -85,6 +92,7 @@ def analisar_oxigenio(dados):
         else:
             print(f"CICLO {i + 1}: Nível de Oxigênio NORMAL ({oxigenio}%)")
 
+
 # Analisa a estabilidade do sistema.
 def analisar_estabilidade(dados):
     print("\n=== ANÁLISE DE ESTABILIDADE ===")
@@ -101,42 +109,41 @@ def analisar_estabilidade(dados):
         else:
             print(f"CICLO {i + 1}: Estabilidade NORMAL ({estabilidade}%)")
 
-# Classifica o ciclo com base na pontuação total, atribuindo categorias de "Normal", "Atenção" ou "Crítico".
-def classificar_ciclo(pontuacao): 
+
+# Classifica o ciclo com base na pontuação total.
+def classificar_ciclo(pontuacao):
     if pontuacao == 0:
         return "Normal"
     if pontuacao <= 2:
         return "Atenção"
     return "Crítico"
 
-# Analisa a tendência da pontuação total ao longo dos ciclos para identificar se a situação está melhorando, piorando ou estável.
-def analisar_tendencia(pontuacao_total):
-    # Analisa a tendência da pontuação total ao longo dos ciclos.
-    if len(pontuacao_total) < 2:
+
+# Analisa a tendência da pontuação total ao longo dos ciclos.
+def analisar_tendencia(pontuacoes):
+    if len(pontuacoes) < 2:
         return "Dados insuficientes para tendência"
-    
-    # Calcula as diferenças entre as pontuações de ciclos consecutivos para determinar a tendência geral.
-    diffs = [pontuacao_total[i] - pontuacao_total[i - 1] for i in range(1, len(pontuacao_total))]
+
+    diffs = [pontuacoes[i] - pontuacoes[i - 1] for i in range(1, len(pontuacoes))]
+
     if all(d == 0 for d in diffs):
         return "Estável"
-    
     if all(d <= 0 for d in diffs) and any(d < 0 for d in diffs):
         return "Melhorando"
-    
     if all(d >= 0 for d in diffs) and any(d > 0 for d in diffs):
         return "Piorando"
-    
-    else:
-        return "Tendência instável"
 
-# Identifica qual área (temperatura, comunicação, bateria, oxigênio ou estabilidade) está mais afetada com base na pontuação total acumulada para cada área ao longo dos ciclos.
+    return "Tendência instável"
+
+
+# Identifica qual área está mais afetada ao longo dos ciclos.
 def identificar_area_mais_afetada(dados):
     scores = [0] * len(AREAS)
 
     for leitura in dados:
         temperatura, comunicacao, bateria, oxigenio, estabilidade = leitura
 
-        if temperatura < 18 or (30 < temperatura <= 35):
+        if temperatura < 18 or 30 < temperatura <= 35:
             scores[0] += 1
         elif temperatura > 35:
             scores[0] += 2
@@ -167,35 +174,32 @@ def identificar_area_mais_afetada(dados):
 
     return AREAS[scores.index(max_score)], max_score
 
-# Gera uma recomendação final com base na pontuação total, na área mais afetada e na tendência geral da missão.
-def gerar_recomendacao(pontuacao_total, area_afetada, tendencia):
 
+# Gera uma recomendação final para a missão.
+def gerar_recomendacao(pontuacoes, area_afetada, tendencia):
     if tendencia == "Piorando":
         return f"Atenção urgente: revisar sistemas críticos, especialmente {area_afetada}."
-    
     if tendencia == "Melhorando":
         return f"Continuar monitoramento e manter foco em {area_afetada}."
-    
     if tendencia == "Tendência instável":
         return "Monitorar todas as variáveis de perto e validar as leituras do próximo ciclo."
-    
+
     return "Manter vigilância e seguir os protocolos de missão."
 
-# Gera recomendações específicas para cada ciclo com base na pontuação total e nos problemas identificados em cada área, fornecendo orientações claras para a equipe de controle da missão.
-def gerar_recomendacoes_por_ciclo(dados, pontuacao_total):
+
+# Gera recomendações específicas para cada ciclo.
+def gerar_recomendacoes_por_ciclo(dados, pontuacoes):
     recomendacoes = []
 
     for i, leitura in enumerate(dados):
         temperatura, comunicacao, bateria, oxigenio, estabilidade = leitura
-        classificacao = classificar_ciclo(pontuacao_total[i])
+        classificacao = classificar_ciclo(pontuacoes[i])
         problemas = []
 
         if temperatura < 18:
             problemas.append("temperatura baixa")
-
         elif temperatura > 35:
             problemas.append("superaquecimento")
-
         elif temperatura > 30:
             problemas.append("temperatura alta")
 
@@ -206,32 +210,27 @@ def gerar_recomendacoes_por_ciclo(dados, pontuacao_total):
 
         if bateria < 20:
             problemas.append("bateria baixa")
-
         elif bateria < 50:
             problemas.append("bateria moderada")
 
         if oxigenio < 80:
             problemas.append("oxigênio crítico")
-
         elif oxigenio < 90:
             problemas.append("oxigênio moderado")
 
         if estabilidade < 40:
             problemas.append("estabilidade fraca")
-
         elif estabilidade < 70:
             problemas.append("estabilidade moderada")
 
         if classificacao == "Normal":
-            recomendacao = f"Ciclo {i+1} : manter monitoramento regular e garantir estabilidade dos sistemas."
-
+            recomendacao = f"Ciclo {i + 1}: manter monitoramento regular e garantir estabilidade dos sistemas."
         else:
             descricao_problemas = " e ".join(problemas) if problemas else "sinais de alerta"
-            recomendacao = f"Ciclo {i+1} ({classificacao}): revisar {descricao_problemas}."
+            recomendacao = f"Ciclo {i + 1} ({classificacao}): revisar {descricao_problemas}."
 
             if classificacao == "Crítico":
                 recomendacao += " Ação imediata recomendada."
-
             else:
                 recomendacao += " Atenção e acompanhamento no próximo ciclo."
 
@@ -239,10 +238,65 @@ def gerar_recomendacoes_por_ciclo(dados, pontuacao_total):
 
     return recomendacoes
 
-# Gera um relatório final consolidando as análises, classificações, tendências e recomendações para a equipe de controle da missão, apresentando uma visão clara e estruturada dos resultados.
-def gerar_relatorio_final(classificacoes, pontuacoes, tendencia, area_afetada, recomendacoes_por_ciclo, recomendacao):
+
+# Gera uma decisão prática a ser tomada para cada ciclo.
+def gerar_decisao_por_ciclo(leitura):
+    temperatura, comunicacao, bateria, oxigenio, estabilidade = leitura
+    decisoes = []
+
+    if temperatura < 18:
+        decisoes.append("Aumente a geração de calor nos sistemas de aquecimento para evitar danos à nave e sua tripulação.")
+    elif temperatura > 35:
+        decisoes.append("Desligue sistemas de aquecimento não essenciais e acione o resfriamento de emergência.")
+    elif temperatura > 30:
+        decisoes.append("Reduza a geração de calor e reforce o resfriamento para evitar superaquecimento.")
+
+    if comunicacao < 30:
+        decisoes.append("Ative os canais de comunicação de emergência e priorize o envio de dados críticos para a Terra.")
+    elif comunicacao < 60:
+        decisoes.append("Reduza transmissões não essenciais e monitore a qualidade do sinal.")
+
+    if bateria < 20:
+        decisoes.append("Desative cargas não essenciais e preserve energia para suporte à vida e navegação.")
+    elif bateria < 50:
+        decisoes.append("Economize energia e prepare o ciclo de recarga das baterias.")
+
+    if oxigenio < 80:
+        decisoes.append("Acione a reserva de oxigênio e verifique possíveis falhas no suporte à vida.")
+    elif oxigenio < 90:
+        decisoes.append("Aumente o monitoramento do suporte à vida e prepare a reserva de oxigênio.")
+
+    if estabilidade < 40:
+        decisoes.append("Ative o protocolo de estabilização e redistribua o controle de atitude da nave.")
+    elif estabilidade < 70:
+        decisoes.append("Ajuste os sistemas de estabilização e acompanhe novas oscilações.")
+
+    if not decisoes:
+        return "Manter os sistemas em operação normal e continuar o monitoramento do ciclo."
+
+    return " ".join(decisoes)
+
+
+def gerar_decisoes_por_ciclo(dados):
+    return [gerar_decisao_por_ciclo(leitura) for leitura in dados]
+
+
+# Gera o relatório final consolidado.
+def gerar_relatorio_final(
+    classificacoes,
+    pontuacoes,
+    tendencia,
+    area_afetada,
+    recomendacoes_por_ciclo,
+    decisoes_por_ciclo,
+    recomendacao,
+):
     linhas = [
         "=== RELATÓRIO FINAL DA MISSÃO ===",
+        "Missão: Lusiadas I ",
+        "Equipe: Harpía Vermelha",
+        
+        f"Quantidade de ciclos analisados: {len(classificacoes)}",
         f"Tendência geral: {tendencia}",
         f"Área mais afetada: {area_afetada}",
         "",
@@ -255,28 +309,31 @@ def gerar_relatorio_final(classificacoes, pontuacoes, tendencia, area_afetada, r
         "Crítico": "MISSÃO CRÍTICA",
     }
 
-    for indice, (classificacao, pontuacao, recomendacao_ciclo) in enumerate(
-        zip(classificacoes, pontuacoes, recomendacoes_por_ciclo), start=1
+    for indice, (classificacao, pontuacao, recomendacao_ciclo, decisao_ciclo) in enumerate(
+        zip(classificacoes, pontuacoes, recomendacoes_por_ciclo, decisoes_por_ciclo), start=1
     ):
         texto_classe = classificacao_texto.get(classificacao, classificacao.upper())
         linhas.append(f"Ciclo {indice}:")
         linhas.append(f"  Pontuação de risco do ciclo: {pontuacao}")
         linhas.append(f"  Classificação do ciclo: {texto_classe}")
         linhas.append(f"  Recomendação: {recomendacao_ciclo}")
+        linhas.append(f"  Decisão: {decisao_ciclo}")
         linhas.append("")
 
     linhas.append("Recomendação geral:")
     linhas.append(f"  {recomendacao}")
     linhas.append("")
+
     return "\n".join(linhas)
 
-# Exibe os resultados da análise, incluindo classificações, tendências, áreas afetadas e recomendações, em um formato estruturado e fácil de entender para a equipe de controle da missão.
+
+# Exibe os resultados da análise em formato estruturado.
 def exibir_resultados():
     classificacoes = [classificar_ciclo(p) for p in pontuacao_total]
     tendencia = analisar_tendencia(pontuacao_total)
     area_afetada, _ = identificar_area_mais_afetada(dados_missao)
     recomendacoes_por_ciclo = gerar_recomendacoes_por_ciclo(dados_missao, pontuacao_total)
-
+    decisoes_por_ciclo = gerar_decisoes_por_ciclo(dados_missao)
     recomendacao = gerar_recomendacao(pontuacao_total, area_afetada, tendencia)
 
     return gerar_relatorio_final(
@@ -285,12 +342,44 @@ def exibir_resultados():
         tendencia,
         area_afetada,
         recomendacoes_por_ciclo,
+        decisoes_por_ciclo,
         recomendacao,
     )
 
 
-# Executa a análise completa dos dados da missão, gerando um relatório final e utilizando o modelo de linguagem para fornecer um resumo das conclusões e recomendações para a equipe de controle da missão.
+def gerar_relatorio_helper(relatorio):
+    if ollama is None:
+        return "Ollama não está instalado. A análise complementar do B-12 não foi gerada."
+
+    try:
+        resposta = ollama.chat(
+            model="llama3.2:1b",
+            messages=[
+                {
+                    "role": "system",
+                    "content": ("Você é um assistente de Controle de Missão que no momento está operando numa nave com rumo a marte. Seu nome é B-12. Seja atencioso, prestativo e educado, Sempre se apresente e forneça analises precisas e objetivas dos dados fornecidos pelos usuários, Por fim, faça uma pequena síntese de tudo que você falou e se despeça."),
+
+                },
+                {
+                    "role": "user",
+                    "content": (
+                        f"Analise os seguintes dados da missão: {relatorio} "
+                        "e forneça um resumo das principais conclusões, recomendações e tomadas de decisão para a equipe de controle da missão."
+                    ),
+                },
+            ],
+        )
+        return resposta.get("message", {}).get("content", "Sem resposta do modelo.")
+    except Exception as erro:
+        return f"Análise complementar não gerada. Erro ao acessar o Ollama: {erro}"
+
+
+# Executa a análise completa dos dados da missão.
 def executar_analise():
+    global pontuacao_total
+
+    pontuacao_total = reiniciar_pontuacao(dados_missao)
+
     analisar_temperatura(dados_missao)
     analisar_comunicacao(dados_missao)
     analisar_bateria(dados_missao)
@@ -301,25 +390,9 @@ def executar_analise():
     print()
     print(relatorio)
 
-    resposta = ollama.chat(
-        model="llama3.2:1b",
-        messages=[
-            {
-                "role": "system",
-                "content": "Você é um assistente de análise de dados de missão espacial chamado Helper 001.",
-            },
-            {
-                "role": "user",
-                "content": (
-                    f"Analise os seguintes dados da missão: {relatorio} "
-                    "e forneça um resumo das principais conclusões e recomendações para a equipe de controle da missão."
-                ),
-            },
-        ],
-    )
+    print("======== Relatório da IA de bordo B-12 ========")
+    print(gerar_relatorio_helper(relatorio))
 
-    print("\n=== RELATÓRIO DO HELPER 001 ===")
-    print(resposta.get('message', {}).get('content', 'Sem resposta do modelo.'))
 
 if __name__ == "__main__":
     executar_analise()
