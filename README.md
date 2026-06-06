@@ -31,6 +31,8 @@ Cada linha representa um ciclo da missão. Cada ciclo segue esta ordem:
 
 ## Como Executar
 
+OBS: Recomendo utilizar a execução com GPU no collab, o sistema é mais estável nessa configuração.
+
 Execute o arquivo principal:
 
 ```powershell
