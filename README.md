@@ -4,8 +4,8 @@ Sistema em Python para simular o monitoramento de uma missão espacial experimen
 
 ## Integrantes
 
-- Nome Completo - RM: XXXXXX
-- Nome Completo - RM: XXXXXX
+- Mateus Felipe Curtale Serafim - RM: 571129
+- Vinicius Sanches Chiarle - RM: 568846
 
 ## O Que O Projeto Faz
 
@@ -48,12 +48,11 @@ O programa também funciona sem IA. Nesse caso, ele exibe o relatório calculado
 
 ## Demonstração
 
-Adicione aqui prints reais do sistema funcionando:
+Prints da execução
 
-```markdown
-![Ciclo normal](assets/ciclo_normal.png)
-![Ciclo crítico](assets/ciclo_critico.png)
-```
+<img src="https://github.com/MateusCurtale/control_missionIA/blob/main/Captura%20de%20tela%202026-06-04%20214219.png" alt="Print de execução 01">
+<img src="https://github.com/MateusCurtale/control_missionIA/blob/main/Captura%20de%20tela%202026-06-04%20214326.png" alt="Print de execução 02">
+
 
 ## Vídeo
 
