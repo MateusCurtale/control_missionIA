@@ -2,6 +2,8 @@
 
 Sistema em Python para simular o monitoramento de uma missão espacial experimental. O programa gera uma matriz com ciclos da missão, analisa temperatura, comunicação, bateria, oxigênio e estabilidade, calcula risco operacional e exibe um relatório final no terminal.
 
+Foi feita também uma simulação no TinkerCad em arduino que mostra como os sensores e alarmes iriam funcionar na realidade.
+
 ## Integrantes
 
 - Mateus Felipe Curtale Serafim - RM: 571129
@@ -28,8 +30,17 @@ Cada linha representa um ciclo da missão. Cada ciclo segue esta ordem:
 - Python 3
 - Biblioteca `ollama` para a análise complementar com IA
 - Modelo `llama3.2:1b`
+- Arduino UNO
+- Linguagem C++
 
 ## Como Executar
+Execute a simulação no TinkerCad:
+
+```powershell
+https://www.tinkercad.com/things/6th50dWSHvK-gsgrilo/editel?returnTo=https%3A%2F%2Fwww.tinkercad.com%2Fdashboard&sharecode=ntjodAMqM4D1GoqJDj9dHxeZYhR5VEK6xgiyfHjwIBU
+```
+
+OBS: Recomendo utilizar a execução com GPU no collab, o sistema é mais estável nessa configuração.
 
 Execute o arquivo principal:
 
@@ -44,6 +55,11 @@ python -m pip install ollama
 ollama pull llama3.2:1b
 ```
 
+Link do código no colab
+
+```powershell
+https://colab.research.google.com/drive/1HpElrFFEg97cOmT68rAu_-RQGcS9mcnJ?usp=sharing
+```
 O programa também funciona sem IA. Nesse caso, ele exibe o relatório calculado pelas regras do Python e informa que a análise complementar não foi gerada.
 
 ## Demonstração
@@ -56,4 +72,4 @@ Prints da execução
 
 ## Vídeo
 
-[Assistir ao vídeo de demonstração](https://link-do-video.com)
+https://www.linkedin.com/posts/mateus-curtale-serafim_fiap-ia-globalsoution-ugcPost-7468869698475094016-InsQ/?utm_source=share&utm_medium=member_desktop&rcm=ACoAADv3OS8BEf8mAuZIKWob44tDC1KpXSghiKg
