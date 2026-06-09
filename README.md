@@ -33,33 +33,29 @@ Cada linha representa um ciclo da missão. Cada ciclo segue esta ordem:
 - Arduino UNO
 - Linguagem C++
 
-## Como Executar
-Execute a simulação no TinkerCad:
+# Como Executar:
 
-```powershell
+## Execute a simulação no TinkerCad:
 https://www.tinkercad.com/things/6th50dWSHvK-gsgrilo/editel?returnTo=https%3A%2F%2Fwww.tinkercad.com%2Fdashboard&sharecode=ntjodAMqM4D1GoqJDj9dHxeZYhR5VEK6xgiyfHjwIBU
-```
 
-OBS: Recomendo utilizar a execução com GPU no collab, o sistema é mais estável nessa configuração.
-
-Execute o arquivo principal:
+# Execute o arquivo principal:
 
 ```powershell
 python mission_control_ai.py
 ```
 
-Para habilitar a IA:
+# Para habilitar a IA:
 
 ```powershell
 python -m pip install ollama
 ollama pull llama3.2:1b
 ```
 
-Link do código no colab
-
-```powershell
+## Link do código no colab
 https://colab.research.google.com/drive/1HpElrFFEg97cOmT68rAu_-RQGcS9mcnJ?usp=sharing
-```
+
+OBS: Recomendo utilizar a execução com GPU no collab, o sistema é mais estável nessa configuração.
+
 O programa também funciona sem IA. Nesse caso, ele exibe o relatório calculado pelas regras do Python e informa que a análise complementar não foi gerada.
 
 ## Demonstração
