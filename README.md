@@ -2,6 +2,8 @@
 
 Sistema em Python para simular o monitoramento de uma missão espacial experimental. O programa gera uma matriz com ciclos da missão, analisa temperatura, comunicação, bateria, oxigênio e estabilidade, calcula risco operacional e exibe um relatório final no terminal.
 
+Foi feita também uma simulação no TinkerCad em arduino que mostra como os sensores e alarmes iriam funcionar na realidade.
+
 ## Integrantes
 
 - Mateus Felipe Curtale Serafim - RM: 571129
@@ -28,8 +30,15 @@ Cada linha representa um ciclo da missão. Cada ciclo segue esta ordem:
 - Python 3
 - Biblioteca `ollama` para a análise complementar com IA
 - Modelo `llama3.2:1b`
+- Arduino UNO
+- Linguagem C++
 
 ## Como Executar
+Execute a simulação no TinkerCad:
+
+```powershell
+https://www.tinkercad.com/things/6th50dWSHvK-gsgrilo/editel?returnTo=https%3A%2F%2Fwww.tinkercad.com%2Fdashboard&sharecode=ntjodAMqM4D1GoqJDj9dHxeZYhR5VEK6xgiyfHjwIBU
+```
 
 OBS: Recomendo utilizar a execução com GPU no collab, o sistema é mais estável nessa configuração.
 
